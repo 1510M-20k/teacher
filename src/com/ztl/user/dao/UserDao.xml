@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ztl.user.dao.UserDao">
+	
+	
+	<!-- 新增-->
+	<insert id="insert" parameterType="pd">
+		insert into sys_user(
+			id,	
+			user_name,	
+			password,	
+			name,	
+			rights,	
+			role_id,	
+			lastlogin,	
+			ip,	
+			skin,	
+			email,	
+		    phone
+		) values (
+			#{id},	
+			#{user_name},	
+			#{password},	
+			#{name},	
+			#{rights},	
+			#{role_id},	
+			#{lastlogin},	
+			#{ip},	
+			#{skin},	
+			#{email},	
+		    #{phone}
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from sys_user where  id = #{id}
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="pd">
+		update  sys_user
+	    	 <set> 
+				<if test="user_name != null and user_name != '' ">
+					user_name = #{user_name},
+				</if>
+				<if test="password != null and password != '' ">
+					password = #{password},
+				</if>
+				<if test="name != null and name != '' ">
+					name = #{name},
+				</if>
+				<if test="rights != null and rights != '' ">
+					rights = #{rights},
+				</if>
+				<if test="role_id != null and role_id != '' ">
+					role_id = #{role_id},
+				</if>
+				<if test="ip != null and ip != '' ">
+					ip = #{ip},
+				</if>
+				<if test="skin != null and skin != '' ">
+					skin = #{skin},
+				</if>
+				<if test="email != null and email != '' ">
+					email = #{email},
+				</if>
+			 	<if test="phone != null and phone != '' ">
+					phone = #{phone},
+				</if>
+				<if test="lastlogin != null and lastlogin != '' ">
+					lastlogin = #{lastlogin},
+				</if>
+			</set>
+		where  id = #{id}
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="getById" resultType="pd" parameterType="String">
+		select 
+			id,	
+			user_name,	
+			password,	
+			name,	
+			rights,	
+			role_id,	
+			DATE_FORMAT(lastlogin,'%Y-%m-%d %H:%i:%s')  lastlogin,
+			ip,	
+			skin,	
+			email,	
+		    phone
+		from  sys_user where id = #{id}
+	</select>
+	
+	<!-- 列表(分页) -->
+	<select id="getPagelist" resultType="pd" parameterType="pageModel">
+		select
+			   id,
+			   user_name,
+			   password,
+			   name,
+			   rights,
+			   role_id,
+			   DATE_FORMAT(lastlogin,'%Y-%m-%d %H:%i:%s')  lastlogin,
+			   ip,
+			   skin,
+			   email,
+			   phone
+		from 
+				sys_user a
+		where 1=1
+		order by id desc		
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from sys_user
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	<!-- 通过用户名查询-->
+	<select id="getByUserName" resultType="pd" parameterType="String">
+		select 
+			id,	
+			user_name,	
+			password,	
+			name,	
+			rights,	
+			role_id,	
+			DATE_FORMAT(lastlogin,'%Y-%m-%d %H:%i:%s')  lastlogin,
+			ip,	
+			skin,	
+			email,	
+		    phone
+		from  sys_user where user_name = #{user_name}
+	</select>
+</mapper>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ztl.role.dao.RoleDao">
+	
+	
+	<!-- 新增-->
+	<insert id="insert" parameterType="pd">
+		insert into sys_role(
+			id,	
+			role_name,	
+			rights,	
+			pid,	
+			add_qx,	
+			del_qx,	
+			edit_qx,	
+			cha_qx,	
+			sh_qx,	
+			by1_qx,	
+			by2_qx,	
+		    by3_qx
+		) values (
+			#{id},	
+			#{role_name},	
+			#{rights},	
+			#{pid},	
+			#{add_qx},	
+			#{del_qx},	
+			#{edit_qx},	
+			#{cha_qx},	
+			#{sh_qx},	
+			#{by1_qx},	
+			#{by2_qx},	
+		    #{by3_qx}
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from sys_role where  id = #{id}
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="pd">
+		update  sys_role
+	    	 <set> 
+				<if test="role_name != null and role_name != '' ">
+					role_name = #{role_name},
+				</if>
+				<if test="rights != null and rights != '' ">
+					rights = #{rights},
+				</if>
+				<if test="pid != null and pid != '' ">
+					pid = #{pid},
+				</if>
+				<if test="add_qx != null and add_qx != '' ">
+					add_qx = #{add_qx},
+				</if>
+				<if test="del_qx != null and del_qx != '' ">
+					del_qx = #{del_qx},
+				</if>
+				<if test="edit_qx != null and edit_qx != '' ">
+					edit_qx = #{edit_qx},
+				</if>
+				<if test="cha_qx != null and cha_qx != '' ">
+					cha_qx = #{cha_qx},
+				</if>
+				<if test="sh_qx != null and sh_qx != '' ">
+					sh_qx = #{sh_qx},
+				</if>
+				<if test="by1_qx != null and by1_qx != '' ">
+					by1_qx = #{by1_qx},
+				</if>
+				<if test="by2_qx != null and by2_qx != '' ">
+					by2_qx = #{by2_qx},
+				</if>
+			 	<if test="by3_qx != null and by3_qx != '' ">
+					by3_qx = #{by3_qx}
+				</if>
+			</set>
+		where  id = #{id}
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="getById" resultType="pd" parameterType="String">
+		select 
+			id,	
+			role_name,	
+			rights,	
+			pid,	
+			add_qx,	
+			del_qx,	
+			edit_qx,	
+			cha_qx,	
+			sh_qx,	
+			by1_qx,	
+			by2_qx,	
+		    by3_qx
+		from  sys_role where id = #{id}
+	</select>
+	
+	<!-- 根据PID查询列表-->
+	<select id="getByPid" resultType="pd" parameterType="String">
+		select 
+			id,	
+			role_name,	
+			rights,	
+			pid,	
+			add_qx,	
+			del_qx,	
+			edit_qx,	
+			cha_qx,	
+			sh_qx,	
+			by1_qx,	
+			by2_qx,	
+		    by3_qx
+		from  sys_role where pid = #{pid} ORDER BY id
+	</select>
+</mapper>

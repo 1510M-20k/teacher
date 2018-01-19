@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ztl.menu.dao.MenuDao">
+	
+	
+	<!-- 新增-->
+	<insert id="insert" parameterType="pd">
+		insert into sys_menu(
+			menu_name,	
+			menu_url,	
+			pid,	
+			menu_order,	
+			menu_icon	
+		) values (
+			#{menu_name},	
+			#{menu_url},	
+			#{pid},	
+			#{menu_order},	
+			#{menu_icon}	
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from sys_menu where  id = #{id}
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="pd">
+		update  sys_menu
+	    	 <set> 
+				<if test="menu_name != null and menu_name != '' ">
+					menu_name = #{menu_name},
+				</if>
+				<if test="menu_url != null and menu_url != '' ">
+					menu_url = #{menu_url},
+				</if>
+				<if test="pid != null and pid != '' ">
+					pid = #{pid},
+				</if>
+				<if test="menu_order != null and menu_order != '' ">
+					menu_order = #{menu_order},
+				</if>
+				<if test="menu_icon != null and menu_icon != '' ">
+					menu_icon = #{menu_icon},
+				</if>
+			 	<if test="menu_type != null and menu_type != '' ">
+					menu_type = #{menu_type}
+				</if>
+			</set>
+		where  id = #{id}
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="getById" resultType="pd" parameterType="String">
+		select 
+			id,	
+			menu_name,	
+			menu_url,	
+			pid,	
+			menu_order,	
+			menu_icon,	
+		    menu_type
+		from  sys_menu where id = #{id}
+	</select>
+	
+	<!-- 列表(分页) -->
+	<select id="getPagelist" resultType="pd" parameterType="pageModel">
+		select
+			   id,
+			   menu_name,
+			   menu_url,
+			   pid,
+			   menu_order,
+			   menu_icon,
+			   menu_type
+		from 
+				sys_menu a
+		where 1=1
+		order by id desc		
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from sys_menu
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	<!-- 列表(全部) -->
+	<select id="getAlllist" resultType="pd" parameterType="pd">
+		select
+			   id,
+			   menu_name,
+			   menu_url,
+			   pid,
+			   menu_order,
+			   menu_icon,
+			   menu_type
+		from 
+				sys_menu a
+		where  1=1
+		<if test="pid != null and pid != '' ">
+				and	pid = #{pid}
+		</if>
+		order by menu_order		
+	</select>
+</mapper>

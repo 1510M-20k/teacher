@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ztl.test.dao.TestDao">
+	
+	
+	<!-- 新增-->
+	<insert id="insert" parameterType="pd">
+		insert into t_test(
+			id,	
+			name,	
+			age,	
+			money,	
+			create_time,	
+		    last_update_time
+		) values (
+			#{id},	
+			#{name},	
+			#{age},	
+			#{money},	
+			#{create_time},	
+		    #{last_update_time}
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from t_test where  id = #{id}
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="pd">
+		update  t_test
+	    	 <set> 
+				<if test="name != null and name != '' ">
+					name = #{name},
+				</if>
+				<if test="age != null and age != '' ">
+					age = #{age},
+				</if>
+				<if test="money != null and money != '' ">
+					money = #{money},
+				</if>
+				<if test="last_update_time != null and last_update_time != '' ">
+					last_update_time = #{last_update_time},
+				</if>
+			</set>
+		where  id = #{id}
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="getById" resultType="pd" parameterType="String">
+		select 
+			id,	
+			name,	
+			age,	
+			money,	
+			create_time,	
+		    last_update_time
+		from  t_test where id = #{id}
+	</select>
+	
+	<!-- 列表(分页) -->
+	<select id="getPagelist" resultType="pd" parameterType="pageModel">
+		select
+			   id,
+			   name,
+			   age,
+			   money,
+			   DATE_FORMAT( a.create_time,'%Y-%m-%d %H:%i:%s')  create_time,
+			   DATE_FORMAT( a.last_update_time,'%Y-%m-%d %H:%i:%s')  last_update_time
+		from 
+				t_test a
+		where 1=1
+		order by create_time   desc		
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from t_test
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+</mapper>

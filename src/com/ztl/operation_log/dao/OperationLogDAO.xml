@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ztl.operation_log.dao.OperationLogDAO" >
+    <insert id="saveLog" parameterType="pd">
+        insert into sys_operate_log (id,loginname, content, operationtime, successed, detail, userip,bid,type,agent)
+        values (#{id},#{loginname}, #{content}, #{operationtime}, #{successed}, #{detail}, #{userip}, #{bid}, #{type}, #{agent})
+    </insert>
+    <select id="getById" resultType="pd" parameterType="String">
+		select id,
+			loginname,	
+			date_format(operationtime,'%y-%m-%d %h:%i:%s') operationtime,
+			content,	
+			bid,	
+			type,	
+			successed,	
+			userip,	
+			detail,	
+		    agent
+		from sys_operate_log
+		where id=#{id}
+	</select>
+	
+	<!-- 分页查询列表-->
+	<select id="getPagelist" resultType="pd" parameterType="pageModel">
+		select
+			id,	
+			loginname,	
+			date_format(operationtime,'%y-%m-%d %h:%i:%s') operationtime,
+			content,	
+			bid,	
+			type,	
+			successed,	
+			userip,	
+			detail,
+		    agent
+		from sys_operate_log a where loginname=#{loginname} 
+		<if test="keyword != null and keyword != '' ">  
+	        and (loginname like '%${keyword}%'  or bid like '%${keyword}%'  or userip like '%${keyword}%' or agent like '%${keyword}%' or content like '%${keyword}%' or operationtime like '%${keyword}%')
+	    </if>
+	    <if test="type != null and type != ''">
+			and type = #{type} 
+		</if>
+		<if test="successed != null and successed != ''">
+			and successed = #{successed} 
+		</if>
+		order by operationtime desc
+		limit #{startpos},#{pagesize}
+	</select>
+
+	<update id="createLogTable" parameterType="pd">  
+          create table  if not exists  `sys_operate_log`(                                          
+                   `id` varchar(36) not null,                                              
+                   `loginname` varchar(50) default null comment '用户名',               
+                   `content` varchar(500) default null comment '业务说明',             
+                   `operationtime` datetime default null comment '操作时间',           
+                   `successed` varchar(10) default null comment '成功/失败',           
+                   `detail` text comment '失败详情',                                   
+                   `userip` varchar(100) default null comment '操作ip',                  
+                   `bid` varchar(50) default null comment '业务id(0未设置-1错误)',  
+                   `type` varchar(100) default null comment '业务类型',                
+                   `agent` varchar(500) default null comment '操作终端', 
+                   primary key (`id`)                                                      
+                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8        
+	</update>
+</mapper>
